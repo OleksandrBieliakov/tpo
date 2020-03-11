@@ -58,8 +58,6 @@ public class FileReaderWriter {
 
     private void writeCycle() {
 
-        System.out.print(intBuffer.get(0) + " " + intBuffer.get(1) + " : "); //TODO remove
-
         intBuffer.put(LAST_INDEX, WRITER_LAST);
 
         int number;
@@ -113,8 +111,6 @@ public class FileReaderWriter {
         if (intBuffer.limit() == 2) return;
         int number;
         int sum = 0;
-
-        System.out.print(intBuffer.get(0) + " " + intBuffer.get(1) + " : ");
 
         for (int i = 0; i < NUMBERS; ++i) {
             number = intBuffer.get(NUMBERS_FROM_INDEX + i);
