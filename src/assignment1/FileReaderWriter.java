@@ -56,16 +56,11 @@ public class FileReaderWriter {
         }
     }
 
-    private void writeCycle(boolean isLast) {
+    private void writeCycle() {
 
-        System.out.print(intBuffer.get(0) + " " + intBuffer.get(1) + " : ");
+        System.out.print(intBuffer.get(0) + " " + intBuffer.get(1) + " : "); //TODO remove
 
         intBuffer.put(LAST_INDEX, WRITER_LAST);
-        if (isLast) {
-            intBuffer.put(IS_FINISHED_INDEX, FINISHED);
-        } else {
-            intBuffer.put(IS_FINISHED_INDEX, UNFINISHED);
-        }
 
         int number;
         for (int n = NUMBERS, i = NUMBERS_FROM_INDEX; n > 0; n--, i++) {
@@ -79,7 +74,7 @@ public class FileReaderWriter {
     }
 
     private void waitForFileUpdate(int mode) {
-        while (intBuffer.get(LAST_INDEX) == mode) {
+        while (intBuffer.get(LAST_INDEX) == mode && intBuffer.get(IS_FINISHED_INDEX) != FINISHED) {
             try {
                 Thread.sleep(WAIT_TIME_MS);
             } catch (InterruptedException e) {
@@ -92,21 +87,24 @@ public class FileReaderWriter {
         boolean isSuccessfulInit = init(path);
         if (!isSuccessfulInit) return;
 
-        if (times == 0) {
-            intBuffer.put(LAST_INDEX, WRITER_LAST);
-            intBuffer.put(IS_FINISHED_INDEX, FINISHED);
+        if (times > 0) {
+            intBuffer.put(IS_FINISHED_INDEX, UNFINISHED);
             buffer.force();
-        } else {
+
             int counter = 0;
 
-            // first write
-            writeCycle(++counter == times);
+            writeCycle();
 
-            while (counter < times) {
+            while (++counter < times) {
                 waitForFileUpdate(WRITER_LAST);
-                writeCycle(++counter == times);
+                writeCycle();
             }
+
+            waitForFileUpdate(WRITER_LAST);
         }
+
+        intBuffer.put(IS_FINISHED_INDEX, FINISHED);
+        buffer.force();
 
         close();
     }
@@ -130,12 +128,13 @@ public class FileReaderWriter {
         init(path);
         if (intBuffer == null) return;
 
-        do {
+        while (true) {
             waitForFileUpdate(READER_LAST);
+            if (intBuffer.get(IS_FINISHED_INDEX) == FINISHED) break;
             calculateSum();
             intBuffer.put(LAST_INDEX, READER_LAST);
             buffer.force();
-        } while (intBuffer.get(1) != FINISHED);
+        }
 
         close();
     }
