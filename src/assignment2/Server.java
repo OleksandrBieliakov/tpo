@@ -32,7 +32,6 @@ public class Server {
     private static final int ADD_LEN = 3;
 
     private static final String BYE = "BYE";
-    private static final int BYE_INDEX = 0;
     private static final int BYE_LEN = 1;
 
     private ServerSocketChannel ssc = null;

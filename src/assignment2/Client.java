@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -90,7 +89,7 @@ public class Client {
     }
 
     private static void printExpectedArgumentsMessage() {
-        System.out.println("Provide arguments: \"ECHO <host> <port> <message>\" or \"ADD <times> <host> <port> <num1> <num2>\".");
+        System.out.println("Provide arguments: \"ECHO <host> <port> <message>\" or \"ADD <host> <port> <num1> <num2>\".");
     }
 
 
