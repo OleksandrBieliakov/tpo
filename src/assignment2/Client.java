@@ -8,7 +8,7 @@ import java.net.Socket;
 import java.util.Arrays;
 import java.util.List;
 
-public class Client {
+abstract public class Client<T> {
 
     private static final int TIMES = 50;
     private static final int WAIT_MS = 200;
@@ -29,9 +29,6 @@ public class Client {
 
     private static final String BYE = "BYE";
 
-    private final AddCommand addCommand = new AddCommand();
-    private final EchoCommand echoCommand = new EchoCommand();
-
     private Socket sock;
     private PrintWriter out;
     private BufferedReader in;
@@ -48,7 +45,7 @@ public class Client {
         }
     }
 
-    private void makeRequest(String req) {
+    protected void makeRequest(String req) {
         System.out.println("Request: " + req);
         out.println(req);
         String resp;
@@ -76,51 +73,49 @@ public class Client {
         }
     }
 
-    public void echo(String message) {
-        makeRequest(ECHO + " " + message);
-    }
-
-    public void add(int num1, int num2) {
-        makeRequest(ADD + " " + num1 + " " + num2);
-    }
-
-    public void bye() {
+    private void bye() {
         makeRequest(BYE);
+    }
+
+    abstract protected void execute(T data);
+
+    void process(T data) {
+        for (int i = 0; i < TIMES; i++) {
+            execute(data);
+            try {
+                Thread.sleep(WAIT_MS);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        bye();
+        close();
     }
 
     private static void printExpectedArgumentsMessage() {
         System.out.println("Provide arguments: \"ECHO <host> <port> <message>\" or \"ADD <host> <port> <num1> <num2>\".");
     }
 
+    static class AddClient extends Client<List<Integer>> {
+        public AddClient(String host, int port) {
+            super(host, port);
+        }
 
-    public interface Command<T> {
-        void execute(T data);
-    }
-
-    public class AddCommand implements Command<List<Integer>> {
         @Override
         public void execute(List<Integer> data) {
-            add(data.get(0), data.get(1));
+            makeRequest(ADD + " " + data.get(0) + " " + data.get(1));
         }
     }
 
-    public AddCommand getAddCommand() {
-        return addCommand;
-    }
+    static class EchoClient extends Client<String> {
+        public EchoClient(String host, int port) {
+            super(host, port);
+        }
 
-    public class EchoCommand implements Command<String> {
         @Override
         public void execute(String data) {
-            echo(data);
+            makeRequest(ECHO + " " + data);
         }
-    }
-
-    public EchoCommand getEchoCommand() {
-        return echoCommand;
-    }
-
-    public void callCommand(Command command, Object data) {
-        command.execute(data);
     }
 
     public static void main(String[] args) {
@@ -138,19 +133,18 @@ public class Client {
             if (port >= 0) {
                 String mode = args[MODE_INDEX].toUpperCase();
                 String host = args[HOST_INDEX];
-                Client client = new Client(host, port);
 
-                Command command = null;
-                Object data = null;
                 if (mode.equals(ECHO) && len == ECHO_ARGS_LEN) {
-                    data = args[MESSAGE_INDEX];
-                    command = client.getEchoCommand();
+                    String data = args[MESSAGE_INDEX];
+                    EchoClient client = new EchoClient(host, port);
+                    client.process(data);
                 } else if (mode.equals(ADD) && len == ADD_ARGS_LEN) {
                     try {
                         int num1 = Integer.parseInt(args[NUM1_INDEX]);
                         int num2 = Integer.parseInt(args[NUM2_INDEX]);
-                        data = Arrays.asList(num1, num2);
-                        command = client.getAddCommand();
+                        List<Integer> data = Arrays.asList(num1, num2);
+                        AddClient client = new AddClient(host, port);
+                        client.process(data);
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
                         printExpectedArgumentsMessage();
@@ -158,20 +152,6 @@ public class Client {
                 } else {
                     printExpectedArgumentsMessage();
                 }
-
-                if (command != null) {
-                    for (int i = 0; i < TIMES; i++) {
-                        client.callCommand(command, data);
-                        try {
-                            Thread.sleep(WAIT_MS);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
-                client.bye();
-                client.close();
             }
         } else {
             printExpectedArgumentsMessage();
