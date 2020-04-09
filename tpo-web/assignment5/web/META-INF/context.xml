@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context crossContext="true">
+
+	<WatchedResource>WEB-INF/web.xml</WatchedResource>
+
+	<Resource name="jdbc/postgres"
+		      auth="Container"
+		      type="javax.sql.DataSource"
+		      maxActive="100"
+		      maxIdle="30"
+		      maxWait="10000"
+		      username="oleksandr"
+		      password="topsecret"
+		      driverClassName="org.postgresql.Driver"
+		      url="jdbc:postgresql://localhost:5432/postgres" />
+</Context>
