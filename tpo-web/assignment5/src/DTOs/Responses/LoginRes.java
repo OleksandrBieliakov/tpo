@@ -2,14 +2,18 @@ package DTOs.Responses;
 
 public class LoginRes {
 
-    private int _id;
+    private int idUser;
 
-    public int get_id() {
-        return _id;
+    public LoginRes(int idUser) {
+        this.idUser = idUser;
     }
 
-    public void set_id(int _id) {
-        this._id = _id;
+    public int getIdUser() {
+        return idUser;
+    }
+
+    public void setIdUser(int idUser) {
+        this.idUser = idUser;
     }
 
 }

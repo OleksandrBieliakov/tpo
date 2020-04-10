@@ -39,7 +39,7 @@ public class LoginView extends HttpServlet {
         LoginRes responseModel = (LoginRes) request.getAttribute(MODEL);
 
         if (responseModel != null) {
-            out.println(responseModel.get_id());
+            out.println(responseModel.getIdUser());
         }
 
         //out.println(END);

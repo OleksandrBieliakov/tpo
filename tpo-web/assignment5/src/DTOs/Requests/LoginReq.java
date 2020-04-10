@@ -2,28 +2,28 @@ package DTOs.Requests;
 
 public class LoginReq {
 
-    private String _userName;
-    private String _userPassword;
+    private String userName;
+    private String userPassword;
 
-    public LoginReq(String _userName, String _userPassword) {
-        this._userName = _userName;
-        this._userPassword = _userPassword;
+    public LoginReq(String userName, String userPassword) {
+        this.userName = userName;
+        this.userPassword = userPassword;
     }
 
-    public String get_userName() {
-        return _userName;
+    public String getUserName() {
+        return userName;
     }
 
-    public void set_userName(String _userName) {
-        this._userName = _userName;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public String get_userPassword() {
-        return _userPassword;
+    public String getUserPassword() {
+        return userPassword;
     }
 
-    public void set_userPassword(String _userPassword) {
-        this._userPassword = _userPassword;
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
     }
 
 }
