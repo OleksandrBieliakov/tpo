@@ -84,14 +84,18 @@ public class PostgresRepository implements IRepository {
         ResourceDetailsRes response = null;
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(
-                    "SELECT " + COLUMN_CONTENT +
+                    "SELECT " + COLUMN_CONTENT + "," + COLUMN_RESOURCE_NAME +
                             " FROM " + TABLE_RESOURCE +
-                            " WHERE " + COLUMN_ID_RESOURCE + "=?");
+                            " JOIN " + TABLE_USER_RESOURCES +
+                            " ON " + TABLE_USER_RESOURCES + "." + COLUMN_ID_RESOURCE + "=" + TABLE_RESOURCE + "." + COLUMN_ID_RESOURCE +
+                            " WHERE " + TABLE_RESOURCE + "." + COLUMN_ID_RESOURCE + "=? AND " + COLUMN_ID_USER + "=?");
             statement.setInt(1, request.getIdResource());
+            statement.setInt(2, request.getIdUser());
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
+                String resourceName = resultSet.getString(COLUMN_RESOURCE_NAME);
                 String content = resultSet.getString(COLUMN_CONTENT);
-                response = new ResourceDetailsRes(content);
+                response = new ResourceDetailsRes(resourceName, content);
             }
             resultSet.close();
         }

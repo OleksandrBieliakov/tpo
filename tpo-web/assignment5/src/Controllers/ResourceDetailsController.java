@@ -87,15 +87,30 @@ public class ResourceDetailsController extends HttpServlet {
             return;
         }
 
-        int idResource = Integer.parseInt(request.getParameter(PARAMETER_ID_RESOURCE));
-        // TODO some validation ?
+        String idResourceParameter = request.getParameter(PARAMETER_ID_RESOURCE);
+        if (idResourceParameter == null) {
+            response.sendError(400);
+            return;
+        }
+
+        int idResource;
+        try {
+            idResource = Integer.parseInt(request.getParameter(PARAMETER_ID_RESOURCE));
+        } catch (NumberFormatException exception) {
+            throw new WebException("Error occurred during getting the details of a resource.", exception);
+        }
 
         ResourceDetailsRes resourceDetailsRes;
         try {
-            resourceDetailsRes = repository.getResourceDetails(new ResourceDetailsReq(idResource));
+            resourceDetailsRes = repository.getResourceDetails(new ResourceDetailsReq(idResource, idUser));
         } catch (Exception exception) {
             exception.printStackTrace();
             throw new WebException("Error occurred during getting the details of a resource.", exception);
+        }
+
+        if (resourceDetailsRes == null) {
+            response.sendError(401, "Authenticated user doesn't have permission to access requested resources.");
+            return;
         }
 
         PrintWriter out = response.getWriter();
@@ -104,8 +119,7 @@ public class ResourceDetailsController extends HttpServlet {
         out.println(BACK_BUTTON);
         out.println("User ID: " + idUser + " : " + firstName + " " + lastName + "<hr>");
 
-        //TODO add name of the resource + some null validation
-        out.println("<p></p>" + resourceDetailsRes.getContent() + "</br>\n");
+        out.println("<h1>" + resourceDetailsRes.getResourceName() + "</h1>\n<p></p>" + resourceDetailsRes.getContent() + "</br>\n");
 
         out.println(END);
         out.close();

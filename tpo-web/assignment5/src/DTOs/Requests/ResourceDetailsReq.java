@@ -4,8 +4,11 @@ public class ResourceDetailsReq {
 
     private int idResource;
 
-    public ResourceDetailsReq(int idResource) {
+    private int idUser;
+
+    public ResourceDetailsReq(int idResource, int idUser) {
         this.idResource = idResource;
+        this.idUser = idUser;
     }
 
     public int getIdResource() {
@@ -14,6 +17,14 @@ public class ResourceDetailsReq {
 
     public void setIdResource(int idResource) {
         this.idResource = idResource;
+    }
+
+    public int getIdUser() {
+        return idUser;
+    }
+
+    public void setIdUser(int idUser) {
+        this.idUser = idUser;
     }
 
 }

@@ -25,6 +25,9 @@ import java.io.PrintWriter;
 public class ResourcesListController extends HttpServlet {
 
     private static final String LOGIN_VIEW = "/index.html";
+    private static final String DETAILS_VIEW = "/resources/details";
+
+    private static final String DETAILS_PARAMETER_RESOURCE_ID = "?idResource=";
 
     private static final String USER_ID = "userId";
     private static final String USER_FIRST_NAME = "userFirstName";
@@ -32,17 +35,17 @@ public class ResourcesListController extends HttpServlet {
 
     private static final String START =
             "<html lang=\"en\">\n" +
-            "<head>\n" +
-            "    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=windows-1250\">\n" +
-            "    <title>Resources</title>\n" +
-            "</head>\n" +
-            "<body>\n";
+                    "<head>\n" +
+                    "    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=windows-1250\">\n" +
+                    "    <title>Resources</title>\n" +
+                    "</head>\n" +
+                    "<body>\n";
     private static final String END = "\n</body>\n</html>";
 
     private static final String LOGOUT_BUTTON =
             "    <form method=\"get\" action=\"/logout\">\n" +
-            "    <button type=\"submit\">LOG OUT</button>\n" +
-            "    </form><br>\n";
+                    "    <button type=\"submit\">LOG OUT</button>\n" +
+                    "    </form><br>\n";
 
     @Resource(name = "jdbc/myPostgresDB")
     private DataSource dataSource;
@@ -96,8 +99,8 @@ public class ResourcesListController extends HttpServlet {
         out.println("User ID: " + idUser + " : " + firstName + " " + lastName + "<hr>");
 
         for (ResourceModel resource : listResourcesResponse.getResources()) {
-            //TODO proper html
-            out.println(resource.getIdResource() + " " + resource.getResourceName());
+            out.println("<a href='" + DETAILS_VIEW + DETAILS_PARAMETER_RESOURCE_ID + resource.getIdResource() + "'>"
+                    + resource.getResourceName() + "</a><br>");
         }
         out.println(END);
         out.close();
