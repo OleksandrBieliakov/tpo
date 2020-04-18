@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context path="/">
-	<ResourceLink name="jdbc/myPostgresDB"
-				  global="jdbc/myPostgresDB"
-				  type="javax.sql.DataSource"/>
+
+    <ResourceLink name="jdbc/myPostgresDB"
+                  global="jdbc/myPostgresDB"
+                  type="javax.sql.DataSource"/>
+    <!--
+    <Resource name="jdbc/myPostgresDB"
+              auth="Container"
+              type="javax.sql.DataSource"
+              maxActive="100"
+              maxIdle="30"
+              maxWait="10000"
+              username="oleksandr"
+              password="topsecret"
+              driverClassName="org.postgresql.Driver"
+              url="jdbc:postgresql://localhost:5432/academy" />
+    -->
 </Context>
