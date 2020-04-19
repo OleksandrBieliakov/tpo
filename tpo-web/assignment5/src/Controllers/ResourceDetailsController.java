@@ -20,7 +20,7 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet("/resources/details")
+@WebServlet("/resources/details/*")
 public class ResourceDetailsController extends HttpServlet {
 
     private static final String PARAMETER_ID_RESOURCE = "idResource";
@@ -87,15 +87,18 @@ public class ResourceDetailsController extends HttpServlet {
             return;
         }
 
+/*
         String idResourceParameter = request.getParameter(PARAMETER_ID_RESOURCE);
         if (idResourceParameter == null) {
             response.sendError(400);
             return;
         }
+*/
 
         int idResource;
         try {
-            idResource = Integer.parseInt(request.getParameter(PARAMETER_ID_RESOURCE));
+            String pathInfo = request.getPathInfo(); //e.g. /1
+            idResource = Integer.parseInt(pathInfo.substring(1, pathInfo.length()));
         } catch (NumberFormatException exception) {
             throw new WebException("Error occurred during getting the details of a resource.", exception);
         }

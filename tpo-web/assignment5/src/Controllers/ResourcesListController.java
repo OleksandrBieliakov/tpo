@@ -25,7 +25,7 @@ import java.io.PrintWriter;
 public class ResourcesListController extends HttpServlet {
 
     private static final String LOGIN_VIEW = "/index.html";
-    private static final String DETAILS_VIEW = "/resources/details";
+    private static final String DETAILS_VIEW = "/resources/details/";
 
     private static final String DETAILS_PARAMETER_RESOURCE_ID = "?idResource=";
 
@@ -99,7 +99,7 @@ public class ResourcesListController extends HttpServlet {
         out.println("User ID: " + idUser + " : " + firstName + " " + lastName + "<hr>");
 
         for (ResourceModel resource : listResourcesResponse.getResources()) {
-            out.println("<a href='" + DETAILS_VIEW + DETAILS_PARAMETER_RESOURCE_ID + resource.getIdResource() + "'>"
+            out.println("<a href='" + DETAILS_VIEW + resource.getIdResource() + "'>"
                     + resource.getResourceName() + "</a><br>");
         }
         out.println(END);
