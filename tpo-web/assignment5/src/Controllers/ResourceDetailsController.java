@@ -23,8 +23,6 @@ import java.io.PrintWriter;
 @WebServlet("/resources/details/*")
 public class ResourceDetailsController extends HttpServlet {
 
-    private static final String PARAMETER_ID_RESOURCE = "idResource";
-
     private static final String LOGIN_VIEW = "/index.html";
 
     private static final String USER_ID = "userId";
@@ -87,18 +85,10 @@ public class ResourceDetailsController extends HttpServlet {
             return;
         }
 
-/*
-        String idResourceParameter = request.getParameter(PARAMETER_ID_RESOURCE);
-        if (idResourceParameter == null) {
-            response.sendError(400);
-            return;
-        }
-*/
-
         int idResource;
         try {
-            String pathInfo = request.getPathInfo(); //e.g. /1
-            idResource = Integer.parseInt(pathInfo.substring(1, pathInfo.length()));
+            String pathInfo = request.getPathInfo(); // e.g. "/1"
+            idResource = Integer.parseInt(pathInfo.substring(1)); // removing "/"
         } catch (NumberFormatException exception) {
             throw new WebException("Error occurred during getting the details of a resource.", exception);
         }
@@ -120,7 +110,7 @@ public class ResourceDetailsController extends HttpServlet {
         out.println(START);
         out.println(LOGOUT_BUTTON);
         out.println(BACK_BUTTON);
-        out.println("User ID: " + idUser + " : " + firstName + " " + lastName + "<hr>");
+        out.println("User ID " + idUser + " : " + firstName + " " + lastName + "<hr>");
 
         out.println("<h1>" + resourceDetailsRes.getResourceName() + "</h1>\n<p></p>" + resourceDetailsRes.getContent() + "</br>\n");
 
