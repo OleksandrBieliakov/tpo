@@ -42,14 +42,13 @@ public class View extends HttpServlet {
 
     private void serviceRequest(ServletRequest request, ServletResponse response) throws ServletException, IOException {
         PrintWriter out = response.getWriter();
-        out.println(START);
+        //out.println(START);
 
         Model model = (Model) request.getAttribute(MODEL);
-        if (model != null) {
-            out.println(model.getResult());
-        }
 
-        out.println(END);
+        out.println("{ \"sum\": \"" + model.getResult() + "\" }");
+
+        //out.println(END);
         out.close();
     }
 

@@ -1,14 +1,17 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=windows-1250">
-    <title>Test</title>
+    <title>Sum</title>
+    <script src="/scripts/jquery.js"></script>
 </head>
 <body>
-<form method="get" action="/addition">
-    <label>Number1 <input type="number" name="p1" required></label><br>
-    <label>Number2 <input type="number" name="p2" required></label><br>
-    <button type="submit" formmethod="post">POST</button>
-    <button type="submit" formmethod="get">GET</button>
-</form>
+    <form>
+        <label>Number1 POST</label>
+            <input id="number1" type="number" name="p1"><br>
+        <label>Number2 GET </label>
+            <input id="number2" type="number" name="p2"></label><br>
+        <div id="sum"></div>
+    </form>
+    <script src="/scripts/parameters.js"></script>
 </body>
 </html>
