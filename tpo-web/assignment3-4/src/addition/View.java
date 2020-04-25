@@ -46,7 +46,7 @@ public class View extends HttpServlet {
 
         Model model = (Model) request.getAttribute(MODEL);
 
-        out.println("{ \"sum\": \"" + model.getResult() + "\" }");
+        out.println("{ \"sum\" : \"" + model.getResult() + "\" }");
 
         //out.println(END);
         out.close();
